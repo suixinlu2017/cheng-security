@@ -2,13 +2,13 @@ package com.cheng.web.comtroller;
 
 import com.cheng.dto.User;
 import com.cheng.dto.UserQueryCondition;
+import com.cheng.exceptions.UserNotExistException;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,16 +29,7 @@ public class UserController {
      * @return
      */
     @PostMapping
-    public User create(@Valid @RequestBody User user, BindingResult errors) {
-
-        // BindingResult 用于与注解 @Valid 配合使用，记录错误信息
-        if (errors.hasErrors()) {
-            errors.getAllErrors().forEach(error -> {
-                FieldError fieldError = (FieldError) error;
-                String message = fieldError.getField() + " " + error.getDefaultMessage();
-                System.out.println(message);
-            });
-        }
+    public User create(@Valid @RequestBody User user) {
 
         System.out.println(user.getId());
         System.out.println(user.getUsername());
@@ -83,9 +74,10 @@ public class UserController {
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable(name = "id", required = false) String id) {
 
-        User user = new User();
-        user.setUsername("tom");
-        return user;
+        throw new UserNotExistException(id);
+//        User user = new User();
+//        user.setUsername("tom");
+//        return user;
     }
 
     /**

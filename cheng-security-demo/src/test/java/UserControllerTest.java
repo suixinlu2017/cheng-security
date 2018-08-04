@@ -1,5 +1,3 @@
-package com.cheng.web.controller;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

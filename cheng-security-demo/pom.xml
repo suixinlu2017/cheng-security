@@ -19,4 +19,24 @@
             <version>${cheng.security.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!-- spring boot 打包工具 -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.5.14.RELEASE</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- 使用 spring boot 特有的方式进行打包 -->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <finalName>demo</finalName>
+    </build>
 </project>

@@ -1,8 +1,7 @@
-package com.cheng.web.comtroller;
+package com.cheng.web.controller;
 
 import com.cheng.dto.User;
 import com.cheng.dto.UserQueryCondition;
-import com.cheng.exceptions.UserNotExistException;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -74,10 +73,12 @@ public class UserController {
     @JsonView(User.UserDetailView.class)
     public User getInfo(@PathVariable(name = "id", required = false) String id) {
 
-        throw new UserNotExistException(id);
-//        User user = new User();
-//        user.setUsername("tom");
-//        return user;
+//        throw new UserNotExistException(id);
+//        throw new RuntimeException("user not exist");
+        System.out.println("进入 getInfo 服务");
+        User user = new User();
+        user.setUsername("tom");
+        return user;
     }
 
     /**

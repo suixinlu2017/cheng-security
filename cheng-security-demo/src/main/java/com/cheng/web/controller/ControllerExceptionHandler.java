@@ -1,4 +1,4 @@
-package com.cheng.web.comtroller;
+package com.cheng.web.controller;
 
 import com.cheng.exceptions.UserNotExistException;
 import org.springframework.http.HttpStatus;

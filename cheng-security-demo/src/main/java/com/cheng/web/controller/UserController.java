@@ -3,6 +3,8 @@ package com.cheng.web.controller;
 import com.cheng.dto.User;
 import com.cheng.dto.UserQueryCondition;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +48,7 @@ public class UserController {
      */
     @GetMapping
     @JsonView(User.UserSimpleView.class)
+    @ApiOperation(value = "用户查询服务")
     public List<User> query(UserQueryCondition condition,
                             @PageableDefault(page = 2, size = 8, sort = "username.asc") Pageable pageable
             /*@RequestParam(name = "username", required = false, defaultValue = "zy") String nickname*/) {
@@ -71,7 +74,7 @@ public class UserController {
      */
     @RequestMapping("/{id:\\d+}")
     @JsonView(User.UserDetailView.class)
-    public User getInfo(@PathVariable(name = "id", required = false) String id) {
+    public User getInfo(@ApiParam(value = "用户id") @PathVariable(name = "id", required = false) String id) {
 
 //        throw new UserNotExistException(id);
 //        throw new RuntimeException("user not exist");

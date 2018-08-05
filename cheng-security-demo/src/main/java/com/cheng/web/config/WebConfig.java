@@ -5,7 +5,7 @@ import com.cheng.web.interceptor.TimeInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * @author cheng
  *         2018/8/4 21:03
  */
-@Configuration
+//@Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
@@ -38,6 +38,20 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registrationBean.setUrlPatterns(url);
 
         return registrationBean;
+    }
+
+    @Override
+    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+
+        // 注册异步拦截器
+        configurer.registerDeferredResultInterceptors();
+        configurer.registerCallableInterceptors();
+
+        // 异步超时时间
+        configurer.setDefaultTimeout(0);
+
+        // 设置可重用线程池
+        configurer.setTaskExecutor(null);
     }
 
     @Override

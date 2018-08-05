@@ -2,8 +2,6 @@ package com.cheng.web.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
@@ -11,8 +9,8 @@ import java.time.Instant;
  * @author cheng
  *         2018/8/4 21:46
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class TimeAspect {
 
     @Around("execution(* com.cheng.web.controller .UserController.*(..))")

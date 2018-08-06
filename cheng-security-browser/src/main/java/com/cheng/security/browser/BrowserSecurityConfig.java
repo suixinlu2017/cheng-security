@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Spring Security 授权组件
@@ -38,6 +39,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http
+                // 验证码验证
+                .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
                 // form表单验证
                 .formLogin()
                 // 自定义登录页面

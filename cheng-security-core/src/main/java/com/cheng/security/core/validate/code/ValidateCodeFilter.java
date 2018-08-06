@@ -1,10 +1,13 @@
 package com.cheng.security.core.validate.code;
 
+import com.cheng.security.core.properties.SecurityProperties;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -15,6 +18,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 校验验证码过滤器
@@ -22,7 +28,7 @@ import java.io.IOException;
  * @author cheng
  *         2018/8/6 20:05
  */
-public class ValidateCodeFilter extends OncePerRequestFilter {
+public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
 
     /**
      * 验证码校验失败处理器
@@ -31,12 +37,38 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     private AuthenticationFailureHandler authenticationFailureHandler;
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+    /**
+     * 存放所有需要校验验证码的 url
+     */
+    private Set<String> urls = new HashSet<>();
+
+    private SecurityProperties securityProperties;
+
+    private AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    @Override
+    public void afterPropertiesSet() throws ServletException {
+
+        super.afterPropertiesSet();
+
+        String[] configUrls = StringUtils.split(securityProperties.getCode().getImage().getUrl(), ",");
+        urls.addAll(Arrays.asList(configUrls));
+
+        // 默认需要验证的 url
+        urls.add("/authentication/form");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        if (StringUtils.equals("/authentication/form", request.getRequestURI())
-                && StringUtils.equals(request.getMethod(), "POST")) {
+        boolean action = false;
+        for (String url : urls) {
+            if (pathMatcher.match(url, request.getRequestURI())) {
+                action = true;
+            }
+        }
+
+        if (action) {
             try {
                 validate(new ServletWebRequest(request));
             } catch (ValidateCodeException e) {
@@ -88,5 +120,21 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
 
     public void setSessionStrategy(SessionStrategy sessionStrategy) {
         this.sessionStrategy = sessionStrategy;
+    }
+
+    public Set<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(Set<String> urls) {
+        this.urls = urls;
+    }
+
+    public SecurityProperties getSecurityProperties() {
+        return securityProperties;
+    }
+
+    public void setSecurityProperties(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
     }
 }

@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
 /**
- * 图形验证码
+ * 图片验证码
  *
  * @author cheng
  *         2018/8/6 19:35

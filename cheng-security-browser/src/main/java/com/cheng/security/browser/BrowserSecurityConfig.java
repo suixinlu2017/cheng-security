@@ -37,6 +37,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
         validateCodeFilter.setAuthenticationFailureHandler(chengAuthenticationFailureHandler);
 
+        validateCodeFilter.setSecurityProperties(securityProperties);
+        validateCodeFilter.afterPropertiesSet();
+
 
         http
                 // 验证码验证

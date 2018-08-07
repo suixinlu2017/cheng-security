@@ -9,6 +9,8 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    /**
+     * 获取当前用户认证信息
+     *
+     * @return
+     */
+    @GetMapping("/me")
+    public Object getCurrentUser(@AuthenticationPrincipal UserDetails userDetails
+            /*Authentication authentication*/) {
+
+        // 返回所有信息
+//         return SecurityContextHolder.getContext().getAuthentication();
+//         return authentication;
+
+        // 只返回 userDetails 相关信息
+        return userDetails;
+    }
 
     /**
      * 创建用户

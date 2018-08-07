@@ -53,6 +53,12 @@
             <artifactId>spring-social-web</artifactId>
         </dependency>
 
+        <!-- 使用注释处理器生成自己的元数据 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+
         <!-- java-commons  -->
         <dependency>
             <groupId>commons-lang</groupId>

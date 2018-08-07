@@ -7,12 +7,12 @@ import org.springframework.web.context.request.ServletWebRequest;
 import javax.imageio.ImageIO;
 
 /**
- * 图片验证码处理器
+ * 图片校验码处理器
  *
  * @author cheng
  *         2018/8/7 14:54
  */
-@Component("imageCodeProcessor")
+@Component("imageValidateCodeProcessor")
 public class ImageCodeProcessor extends AbstractValidateCodeProcessor<ImageCode> {
 
     /**

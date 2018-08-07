@@ -14,7 +14,7 @@ import org.springframework.web.context.request.ServletWebRequest;
  * @author cheng
  *         2018/8/7 14:21
  */
-@Component("smsCodeGenerator")
+@Component("smsValidateCodeGenerator")
 public class SmsCodeGenerator implements ValidateCodeGenerator {
 
     @Autowired

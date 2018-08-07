@@ -17,6 +17,6 @@ public class DefaultSmsCodeSender implements SmsCodeSender {
     public void send(String mobile, String code) {
         // TODO 短信验证码发送器
         logger.warn("请配置真实的短信验证码发送器(SmsCodeSender)");
-        logger.info("向手机: " + mobile + "，发送短信验证码: " + code);
+        logger.info("向手机: " + mobile + ",发送短信验证码: " + code);
     }
 }

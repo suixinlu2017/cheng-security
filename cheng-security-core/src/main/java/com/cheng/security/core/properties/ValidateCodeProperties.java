@@ -16,7 +16,7 @@ public class ValidateCodeProperties {
     /**
      * 短信验证码配置
      */
-    private SmsCodeProperties smsCodeProperties = new SmsCodeProperties();
+    private SmsCodeProperties sms = new SmsCodeProperties();
 
     public ImageCodeProperties getImage() {
         return image;
@@ -26,11 +26,11 @@ public class ValidateCodeProperties {
         this.image = image;
     }
 
-    public SmsCodeProperties getSmsCodeProperties() {
-        return smsCodeProperties;
+    public SmsCodeProperties getSms() {
+        return sms;
     }
 
-    public void setSmsCodeProperties(SmsCodeProperties smsCodeProperties) {
-        this.smsCodeProperties = smsCodeProperties;
+    public void setSms(SmsCodeProperties sms) {
+        this.sms = sms;
     }
 }

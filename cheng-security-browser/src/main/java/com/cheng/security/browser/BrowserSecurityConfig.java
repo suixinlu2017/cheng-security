@@ -1,6 +1,8 @@
 package com.cheng.security.browser;
 
+import com.cheng.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.cheng.security.core.properties.SecurityProperties;
+import com.cheng.security.core.validate.code.SmsCodeFilter;
 import com.cheng.security.core.validate.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +44,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+
     /**
      * 记住我功能
      *
@@ -61,15 +66,22 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        // 图形验证码
         ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
         validateCodeFilter.setAuthenticationFailureHandler(chengAuthenticationFailureHandler);
-
         validateCodeFilter.setSecurityProperties(securityProperties);
         validateCodeFilter.afterPropertiesSet();
 
+        // 短信验证码
+        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
+        smsCodeFilter.setAuthenticationFailureHandler(chengAuthenticationFailureHandler);
+        smsCodeFilter.setSecurityProperties(securityProperties);
+        smsCodeFilter.afterPropertiesSet();
 
         http
-                // 验证码验证
+                // 短信验证码验证
+                .addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                // 图形验证码验证
                 .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
                 // form表单验证
                 .formLogin()
@@ -103,8 +115,13 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 // 需要身份认证
                 .authenticated()
+
                 // 暂时配置跨域请求无效
-                .and().csrf().disable();
+                .and()
+                .csrf().disable()
+
+                // 引用短信登录配置
+                .apply(smsCodeAuthenticationSecurityConfig);
     }
 
     /**

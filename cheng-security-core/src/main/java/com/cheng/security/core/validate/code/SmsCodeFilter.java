@@ -1,7 +1,6 @@
 package com.cheng.security.core.validate.code;
 
 import com.cheng.security.core.properties.SecurityProperties;
-import com.cheng.security.core.validate.code.image.ImageCode;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -25,12 +24,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 校验验证码过滤器
+ * 校验短信验证码过滤器
  *
  * @author cheng
- *         2018/8/6 20:05
+ *         2018/8/7 18:29
  */
-public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
+public class SmsCodeFilter extends OncePerRequestFilter implements InitializingBean {
 
     /**
      * 验证码校验失败处理器
@@ -53,13 +52,13 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 
         super.afterPropertiesSet();
 
-        String[] configUrls = StringUtils.split(securityProperties.getCode().getImage().getUrl(), ",");
+        String[] configUrls = StringUtils.split(securityProperties.getCode().getSms().getUrl(), ",");
         if (!ArrayUtils.isEmpty(configUrls)) {
             urls.addAll(Arrays.asList(configUrls));
         }
 
         // 默认需要验证的 url
-        urls.add("/authentication/form");
+        urls.add("/authentication/mobile");
     }
 
     @Override
@@ -86,9 +85,9 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 
     private void validate(ServletWebRequest request) throws ServletRequestBindingException {
 
-        ValidateCode codeInSession = (ImageCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX+"IMAGE");
+        ValidateCode codeInSession = (ValidateCode) sessionStrategy.getAttribute(request, ValidateCodeProcessor.SESSION_KEY_PREFIX + "SMS");
 
-        String codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), "imageCode");
+        String codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), "smsCode");
 
         if (StringUtils.isBlank(codeInRequest)) {
             throw new ValidateCodeException("验证码的值不能为空");

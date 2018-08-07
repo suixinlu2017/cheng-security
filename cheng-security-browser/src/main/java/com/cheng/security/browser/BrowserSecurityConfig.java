@@ -98,7 +98,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 配置该链接不需要认证
                 .antMatchers("/authentication/require",
                         securityProperties.getBrowser().getLoginPage(),
-                        "/code/image").permitAll()
+                        "/code/*").permitAll()
                 // 任何请求
                 .anyRequest()
                 // 需要身份认证

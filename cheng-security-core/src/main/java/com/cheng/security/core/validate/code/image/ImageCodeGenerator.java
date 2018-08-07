@@ -1,6 +1,7 @@
-package com.cheng.security.core.validate.code;
+package com.cheng.security.core.validate.code.image;
 
 import com.cheng.security.core.properties.SecurityProperties;
+import com.cheng.security.core.validate.code.ValidateCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -55,7 +56,7 @@ public class ImageCodeGenerator implements ValidateCodeGenerator {
 
         g.dispose();
 
-        return new ImageCode(image, sRand.toString(), securityProperties.getCode().getImage().getExpire());
+        return new ImageCode(image, sRand.toString(), securityProperties.getCode().getImage().getExpireIn());
     }
 
 

@@ -6,7 +6,7 @@ package com.cheng.security.core.properties;
  * @author cheng
  *         2018/8/6 22:32
  */
-public class ImageCodeProperties {
+public class ImageCodeProperties extends SmsCodeProperties {
 
     /**
      * 图片宽
@@ -18,11 +18,9 @@ public class ImageCodeProperties {
      */
     private int height = 23;
 
-    private int length = 4;
-
-    private int expire = 60;
-
-    private String url;
+    public ImageCodeProperties() {
+        setLength(4);
+    }
 
     public int getWidth() {
         return width;
@@ -38,29 +36,5 @@ public class ImageCodeProperties {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public int getLength() {
-        return length;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public int getExpire() {
-        return expire;
-    }
-
-    public void setExpire(int expire) {
-        this.expire = expire;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 }

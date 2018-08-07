@@ -1,7 +1,7 @@
 package com.cheng.code;
 
-import com.cheng.security.core.validate.code.ImageCode;
 import com.cheng.security.core.validate.code.ValidateCodeGenerator;
+import com.cheng.security.core.validate.code.image.ImageCode;
 import org.springframework.web.context.request.ServletWebRequest;
 
 /**

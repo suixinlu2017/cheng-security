@@ -1,6 +1,7 @@
 package com.cheng.security.core.validate.code;
 
 import com.cheng.security.core.properties.SecurityProperties;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,9 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
         super.afterPropertiesSet();
 
         String[] configUrls = StringUtils.split(securityProperties.getCode().getImage().getUrl(), ",");
-        urls.addAll(Arrays.asList(configUrls));
+        if (!ArrayUtils.isEmpty(configUrls)) {
+            urls.addAll(Arrays.asList(configUrls));
+        }
 
         // 默认需要验证的 url
         urls.add("/authentication/form");

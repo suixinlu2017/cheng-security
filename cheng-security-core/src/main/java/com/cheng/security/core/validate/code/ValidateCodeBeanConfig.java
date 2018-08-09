@@ -24,7 +24,7 @@ public class ValidateCodeBeanConfig {
 
     /**
      * 图片验证码图片生成器
-     * 
+     *
      * @return
      */
     @Bean

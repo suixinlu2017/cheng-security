@@ -46,7 +46,7 @@ public class QQOAuth2Template extends OAuth2Template {
 
         String responseStr = getRestTemplate().postForObject(accessTokenUrl, parameters, String.class);
 
-        logger.info("获取 accessToke 的响应："+responseStr);
+        logger.info("获取 accessToke 的响应：" + responseStr);
 
         String[] item = StringUtils.splitByWholeSeparatorPreserveAllTokens(responseStr, "&");
 

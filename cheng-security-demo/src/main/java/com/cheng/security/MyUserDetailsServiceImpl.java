@@ -14,7 +14,6 @@ import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
- *
  * @author cheng
  *         2018/8/6 14:50
  */

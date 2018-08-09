@@ -8,7 +8,20 @@ package com.cheng.security.core.properties;
  */
 public class SocialProperties {
 
+    /**
+     * 社交登录功能拦截的 url
+     */
+    private String filterProcessesUrl = "/auth";
+
     private QQProperties qq = new QQProperties();
+
+    public String getFilterProcessesUrl() {
+        return filterProcessesUrl;
+    }
+
+    public void setFilterProcessesUrl(String filterProcessesUrl) {
+        this.filterProcessesUrl = filterProcessesUrl;
+    }
 
     public QQProperties getQq() {
         return qq;

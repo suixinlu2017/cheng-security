@@ -10,11 +10,21 @@ package com.cheng.security.core.properties;
 
 public class BrowserProperties {
 
-    private String loginPage = "/cheng-signIn.html";
+    private String singUpUrl = "/cheng-signUp.html";
+
+    private String loginPage = SecurityConstants.DEFAULT_LOGIN_PAGE_URL;
 
     private LoginResponseType loginResponseType = LoginResponseType.JSON;
 
     private int rememberMeSeconds = 3600;
+
+    public String getSingUpUrl() {
+        return singUpUrl;
+    }
+
+    public void setSingUpUrl(String singUpUrl) {
+        this.singUpUrl = singUpUrl;
+    }
 
     public String getLoginPage() {
         return loginPage;

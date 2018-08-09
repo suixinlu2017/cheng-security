@@ -6,10 +6,8 @@ import com.cheng.security.core.social.qq.connect.QQConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.social.SocialAutoConfigurerAdapter;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.social.connect.ConnectionFactory;
-import org.springframework.social.security.SpringSocialConfigurer;
 
 /**
  * @author cheng
@@ -27,10 +25,5 @@ public class QQAuthConfig extends SocialAutoConfigurerAdapter {
 
         QQProperties qqConfig = securityProperties.getSocial().getQq();
         return new QQConnectionFactory(qqConfig.getProviderId(), qqConfig.getAppId(), qqConfig.getAppSecret());
-    }
-
-    @Bean
-    public SpringSocialConfigurer chengSocialSecurityConfig() {
-        return new SpringSocialConfigurer();
     }
 }

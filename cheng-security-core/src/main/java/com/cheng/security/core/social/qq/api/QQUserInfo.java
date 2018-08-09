@@ -1,9 +1,12 @@
 package com.cheng.security.core.social.qq.api;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 /**
  * @author cheng
  *         2018/8/8 18:34
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class QQUserInfo {
 
 

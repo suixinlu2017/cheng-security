@@ -43,7 +43,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
     @Autowired
-    private SpringSocialConfigurer chengSocialSpringConfigurer;
+    private SpringSocialConfigurer chengSpringSocialConfigurer;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -60,7 +60,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
                 .and()
                 // 社交登录配置
-                .apply(chengSocialSpringConfigurer)
+                .apply(chengSpringSocialConfigurer)
 
                 .and()
                 // 记住我功能
@@ -74,8 +74,9 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .antMatchers(
                         SecurityConstants.DEFAULT_AUTHENTICATION_URL,
                         SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                        securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
-                        securityProperties.getBrowser().getLoginPage())
+                        securityProperties.getBrowser().getSingUpUrl())
                 .permitAll()
                 .anyRequest()
                 .authenticated()

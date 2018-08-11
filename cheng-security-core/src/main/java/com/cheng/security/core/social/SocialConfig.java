@@ -4,12 +4,15 @@ import com.cheng.security.core.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
@@ -22,6 +25,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableSocial
+@Order(1)
 public class SocialConfig extends SocialConfigurerAdapter {
 
     private static final String TABLE_PREFIX = "cheng_";
@@ -32,12 +36,20 @@ public class SocialConfig extends SocialConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired(required = false)
+    private ConnectionSignUp connectionSignUp;
+
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
 
         // 暂时不做加解密操作（noOpText）
-        JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
+        JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource,
+                connectionFactoryLocator, Encryptors.noOpText());
         repository.setTablePrefix(TABLE_PREFIX);
+
+        if (null != connectionSignUp) {
+            repository.setConnectionSignUp(connectionSignUp);
+        }
 
         return repository;
     }
@@ -45,6 +57,23 @@ public class SocialConfig extends SocialConfigurerAdapter {
     @Bean
     public SpringSocialConfigurer chengSocialSecurityConfig() {
         String filterProcessesUrl = securityProperties.getSocial().getFilterProcessesUrl();
-        return new ChengSpringSocialConfigurer(filterProcessesUrl);
+        ChengSpringSocialConfigurer configurer = new ChengSpringSocialConfigurer(filterProcessesUrl);
+        configurer.signupUrl(securityProperties.getBrowser().getSignUpUrl());
+        return configurer;
+    }
+
+    /**
+     * 解决两个问题：
+     * 1.在注册过程中拿到 Spring Social 的信息
+     * 2.注册完成了如何把业务系统的用户id传给 Spring Social
+     *
+     * @param connectionFactoryLocator
+     * @return
+     */
+    @Bean
+    public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator) {
+        return new ProviderSignInUtils(connectionFactoryLocator,
+                getUsersConnectionRepository(connectionFactoryLocator)) {
+        };
     }
 }

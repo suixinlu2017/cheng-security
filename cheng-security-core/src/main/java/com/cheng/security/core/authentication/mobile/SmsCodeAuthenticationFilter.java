@@ -1,5 +1,7 @@
 package com.cheng.security.core.authentication.mobile;
 
+import com.cheng.security.core.properties.SecurityConstants;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -20,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final String CHENG_FORM_MOBILE_KEY = "mobile";
+    private static final String CHENG_FORM_MOBILE_KEY = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
 
     private String mobileParameter = CHENG_FORM_MOBILE_KEY;
     private boolean postOnly = true;
@@ -28,14 +30,14 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
 
     public SmsCodeAuthenticationFilter() {
         // 处理的请求路径
-        super(new AntPathRequestMatcher("/authentication/mobile", "POST"));
+        super(new AntPathRequestMatcher(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE, HttpMethod.POST.name()));
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
 
-        if (postOnly && !"POST".equals(request.getMethod())) {
+        if (postOnly && !HttpMethod.POST.matches(request.getMethod())) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
 
@@ -70,16 +72,16 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 
-    public void setMobileParameter(String mobileParameter) {
-        Assert.hasText(mobileParameter, "Mobile parameter must not be empty or null");
-        this.mobileParameter = mobileParameter;
-    }
-
     public void setPostOnly(boolean postOnly) {
         this.postOnly = postOnly;
     }
 
     public final String getMobileParameter() {
         return mobileParameter;
+    }
+
+    public void setMobileParameter(String mobileParameter) {
+        Assert.hasText(mobileParameter, "Mobile parameter must not be empty or null");
+        this.mobileParameter = mobileParameter;
     }
 }

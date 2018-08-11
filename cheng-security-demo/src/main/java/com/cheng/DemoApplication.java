@@ -15,12 +15,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class DemoApplication {
 
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+
     @GetMapping("/hello")
     public String hello() {
         return "hello spring security.";
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
 
@@ -41,19 +42,25 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private ValidateCodeSecurityConfig validateCodeSecurityConfig;
 
+    @Autowired
+    private SpringSocialConfigurer chengSpringSocialConfigurer;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-
         applyPasswordAuthenticationConfig(http);
-
 
         http
                 // 校验码相关配置
                 .apply(validateCodeSecurityConfig)
+
                 .and()
                 // 短信登录相关配置
                 .apply(smsCodeAuthenticationSecurityConfig)
+
+                .and()
+                // 社交登录配置
+                .apply(chengSpringSocialConfigurer)
 
                 .and()
                 // 记住我功能
@@ -67,8 +74,10 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .antMatchers(
                         SecurityConstants.DEFAULT_AUTHENTICATION_URL,
                         SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                        securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
-                        securityProperties.getBrowser().getLoginPage())
+                        securityProperties.getBrowser().getSignUpUrl(),
+                        "/user/register")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

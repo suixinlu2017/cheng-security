@@ -1,24 +1,24 @@
-package com.cheng.security.browser;
+package com.cheng.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
- * Spring Security 用户名密码验证
- *
  * @author cheng
  *         2018/8/6 14:50
  */
 @Component
-public class MyUserDetailsServiceImpl implements UserDetailsService {
+public class MyUserDetailsServiceImpl implements UserDetailsService, SocialUserDetailsService {
 
     private Logger logger = LoggerFactory.getLogger(MyUserDetailsServiceImpl.class);
 
@@ -26,7 +26,7 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     /**
-     * TODO 根据用户名查找用户信息
+     * TODO 根据 username 构建 UserDetail
      *
      * @param username
      * @return
@@ -35,13 +35,32 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        logger.info("登录用户名: " + username);
+        logger.info("表单登录用户名: " + username);
+        return buildUser(username);
+    }
 
+    /**
+     * TODO 根据 userId 构建 UserDetail
+     *
+     * @param userId
+     * @return
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+
+        logger.info("社交登录用户id: " + userId);
+        return buildUser(userId);
+    }
+
+    private SocialUserDetails buildUser(String userId) {
+
+        // 根据用户名查找用户信息
+        // 根据查找到的用户信息判断用户是否被冻结
         String password = passwordEncoder.encode("123");
         logger.info("数据库密码是: " + password);
 
-        // 根据查找到的用户信息判断用户是否被冻结
-        return new User(username, password,
+        return new SocialUser(userId, password,
                 true, true, true, true,
                 AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }

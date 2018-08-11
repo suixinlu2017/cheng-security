@@ -7,13 +7,17 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.ServletWebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
+    @Autowired
+    private ProviderSignInUtils providerSignInUtils;
+
+    /**
+     * 注册用户
+     *
+     * @param user
+     * @param request
+     */
+    @PostMapping("/register")
+    public void register(User user, HttpServletRequest request) {
+
+        // 不管是注册用户还是绑定用户都会拿到一个用户唯一标识
+        String userId = user.getUsername();
+        providerSignInUtils.doPostSignUp(userId, new ServletWebRequest(request));
+    }
 
     /**
      * 获取当前用户认证信息

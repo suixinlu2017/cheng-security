@@ -2,12 +2,16 @@ package com.cheng.security.core.social.wechat.config;
 
 import com.cheng.security.core.properties.SecurityProperties;
 import com.cheng.security.core.properties.WechatProperties;
+import com.cheng.security.core.social.social.ChengConnectView;
 import com.cheng.security.core.social.wechat.connect.WechatConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.social.SocialAutoConfigurerAdapter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.social.connect.ConnectionFactory;
+import org.springframework.web.servlet.View;
 
 /**
  * 微信登录配置
@@ -29,5 +33,12 @@ public class WechatAutoConfiguration extends SocialAutoConfigurerAdapter {
         WechatProperties wechatConfig = securityProperties.getSocial().getWechat();
         return new WechatConnectionFactory(wechatConfig.getProviderId(), wechatConfig.getAppId(),
                 wechatConfig.getAppSecret());
+    }
+
+
+    @Bean({"connect/wechatConnect", "connect/wechatConnected"})
+    @ConditionalOnMissingBean(name = "wechatConnectedView")
+    public View wechatConnectedView() {
+        return new ChengConnectView();
     }
 }

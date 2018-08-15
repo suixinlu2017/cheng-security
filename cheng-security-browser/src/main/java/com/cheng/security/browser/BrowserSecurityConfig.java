@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
@@ -45,6 +47,12 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SpringSocialConfigurer chengSpringSocialConfigurer;
 
+    @Autowired
+    private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
+
+    @Autowired
+    private InvalidSessionStrategy invalidSessionStrategy;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -70,6 +78,19 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .userDetailsService(userDetailsService)
 
                 .and()
+                // session 超时处理
+                .sessionManagement()
+                // session 过期处理
+                .invalidSessionStrategy(invalidSessionStrategy)
+                // 最大 session 数量
+                .maximumSessions(securityProperties.getBrowser().getSession().getMaximumSession())
+                // 当用户已经登录，阻止用户登录行为
+                .maxSessionsPreventsLogin(securityProperties.getBrowser().getSession().isMaxSessionPreventsLogin())
+                // 并发登录导致 session 超时的处理策略
+                .expiredSessionStrategy(sessionInformationExpiredStrategy)
+                .and()
+
+                .and()
                 .authorizeRequests()
                 .antMatchers(
                         SecurityConstants.DEFAULT_AUTHENTICATION_URL,
@@ -77,7 +98,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
                         securityProperties.getBrowser().getSignUpUrl(),
-                        "/user/register")
+                        securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
+                        SecurityConstants.DEFAULT_SESSION_INVALID_URL)
                 .permitAll()
                 .anyRequest()
                 .authenticated()

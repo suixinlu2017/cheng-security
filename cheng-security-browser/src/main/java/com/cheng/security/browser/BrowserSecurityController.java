@@ -80,7 +80,7 @@ public class BrowserSecurityController {
      * @return
      */
     @GetMapping("/social/user")
-    public SocialUserInfo getSocialInfo(HttpServletRequest request) {
+    public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
 
         SocialUserInfo userInfo = new SocialUserInfo();
         Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
@@ -91,5 +91,12 @@ public class BrowserSecurityController {
         userInfo.setHeadPortrait(connection.getImageUrl());
 
         return userInfo;
+    }
+
+    @GetMapping(SecurityConstants.DEFAULT_SESSION_INVALID_URL)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    public SimpleResponse sessionInvalid() {
+        String message = "session失效";
+        return new SimpleResponse(message);
     }
 }

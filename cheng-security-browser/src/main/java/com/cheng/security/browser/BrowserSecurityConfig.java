@@ -84,7 +84,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .invalidSessionStrategy(invalidSessionStrategy)
                 // 最大 session 数量
                 .maximumSessions(securityProperties.getBrowser().getSession().getMaximumSession())
-                // 当用户已经登录，阻止用户登录行为
+                // 当session数量达到当前最大值，阻止用户登录行为
                 .maxSessionsPreventsLogin(securityProperties.getBrowser().getSession().isMaxSessionPreventsLogin())
                 // 并发登录导致 session 超时的处理策略
                 .expiredSessionStrategy(sessionInformationExpiredStrategy)

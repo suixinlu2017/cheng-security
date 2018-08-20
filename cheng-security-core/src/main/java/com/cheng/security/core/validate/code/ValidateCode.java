@@ -1,5 +1,6 @@
 package com.cheng.security.core.validate.code;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -8,7 +9,9 @@ import java.time.LocalDateTime;
  * @author cheng
  *         2018/8/7 14:00
  */
-public class ValidateCode {
+public class ValidateCode implements Serializable {
+
+    private static final long serialVersionUID = 7592751197469228875L;
 
     private String code;
 

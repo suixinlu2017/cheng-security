@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.session.InvalidSessionStrategy;
@@ -53,6 +54,9 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private InvalidSessionStrategy invalidSessionStrategy;
 
+    @Autowired
+    private LogoutSuccessHandler logoutSuccessHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -91,6 +95,17 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .and()
 
                 .and()
+                .logout()
+                // 退出登录请求
+                .logoutUrl("/signOut")
+                // 退出成功页
+//                .logoutSuccessUrl("/cheng-logout.html")
+                // 退出成功请求
+                .logoutSuccessHandler(logoutSuccessHandler)
+                // 退出成功时删除 cookie 信息
+                .deleteCookies("JSESSIONID")
+
+                .and()
                 .authorizeRequests()
                 .antMatchers(
                         SecurityConstants.DEFAULT_AUTHENTICATION_URL,
@@ -98,6 +113,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
                         securityProperties.getBrowser().getSignUpUrl(),
+                        securityProperties.getBrowser().getSignOutUrl(),
                         securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
                         SecurityConstants.DEFAULT_SESSION_INVALID_URL)
                 .permitAll()

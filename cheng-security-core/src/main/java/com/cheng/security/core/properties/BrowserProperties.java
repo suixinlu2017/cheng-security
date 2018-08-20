@@ -15,12 +15,26 @@ public class BrowserProperties {
      */
     private SessionProperties session = new SessionProperties();
 
+    /**
+     * 社交登录，如果需要用户注册，跳转的页面
+     */
     private String signUpUrl = "/cheng-signUp.html";
+
+    /**
+     * 退出成功时跳转的 url，如果配置了，则跳到指定的 url，如果没配置，则返回 json 数据
+     */
+    private String signOutUrl;
 
     private String loginPage = SecurityConstants.DEFAULT_LOGIN_PAGE_URL;
 
+    /**
+     * 登录响应的方式，默认是 json
+     */
     private LoginResponseType loginResponseType = LoginResponseType.JSON;
 
+    /**
+     * '记住我' 功能的有效时间，默认为1小时
+     */
     private int rememberMeSeconds = 3600;
 
     public SessionProperties getSession() {
@@ -39,12 +53,19 @@ public class BrowserProperties {
         this.signUpUrl = signUpUrl;
     }
 
+    public String getSignOutUrl() {
+        return signOutUrl;
+    }
+
+    public void setSignOutUrl(String signOutUrl) {
+        this.signOutUrl = signOutUrl;
+    }
+
     public String getLoginPage() {
         return loginPage;
     }
 
     public void setLoginPage(String loginPage) {
-
         this.loginPage = loginPage;
     }
 

@@ -1,0 +1,15 @@
+package com.cheng.security.app;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+
+/**
+ * 资源服务器配置
+ *
+ * @author cheng
+ *         2018/8/26 12:48
+ */
+@Configuration
+@EnableResourceServer
+public class ChengResourceServerConfig {
+}

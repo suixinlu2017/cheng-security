@@ -13,9 +13,14 @@
 
 
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>com.cheng.security</groupId>
             <artifactId>cheng.security.browser</artifactId>
+            <version>${cheng.security.version}</version>
+        </dependency>-->
+       <dependency>
+            <groupId>com.cheng.security</groupId>
+            <artifactId>cheng.security.app</artifactId>
             <version>${cheng.security.version}</version>
         </dependency>
 

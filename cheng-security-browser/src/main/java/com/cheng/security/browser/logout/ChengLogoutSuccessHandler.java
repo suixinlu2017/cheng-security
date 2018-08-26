@@ -1,6 +1,6 @@
 package com.cheng.security.browser.logout;
 
-import com.cheng.security.browser.support.SimpleResponse;
+import com.cheng.security.core.support.SimpleResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;

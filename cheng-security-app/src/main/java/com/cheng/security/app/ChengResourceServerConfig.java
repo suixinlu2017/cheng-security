@@ -3,6 +3,7 @@ package com.cheng.security.app;
 import com.cheng.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.cheng.security.core.properties.SecurityConstants;
 import com.cheng.security.core.properties.SecurityProperties;
+import com.cheng.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,6 +30,9 @@ public class ChengResourceServerConfig extends ResourceServerConfigurerAdapter {
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
     @Autowired
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
+
+    @Autowired
     private SpringSocialConfigurer chengSpringSocialConfig;
 
     @Autowired
@@ -53,9 +57,9 @@ public class ChengResourceServerConfig extends ResourceServerConfigurerAdapter {
 
         http
                 // 校验码相关配置
-//                .apply(validateCodeSecurityConfig)
+                .apply(validateCodeSecurityConfig)
 
-//                .and()
+                .and()
                 // 短信登录相关配置
                 .apply(smsCodeAuthenticationSecurityConfig)
 

@@ -30,6 +30,9 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
     @Autowired
     private Map<String, ValidateCodeGenerator> validateCodeGenerators;
 
+    @Autowired
+    private ValidateCodeRepository validateCodeRepository;
+
     @Override
     public void create(ServletWebRequest request) throws Exception {
         C validateCode = generate(request);
@@ -66,7 +69,8 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
     private void save(ServletWebRequest request, C validateCode) {
         // 解决验证码存入 session 不能序列化问题
         ValidateCode code = new ValidateCode(validateCode.getCode(), validateCode.getExpireTime());
-        sessionStrategy.setAttribute(request, getSessionKey(request), code);
+//        sessionStrategy.setAttribute(request, getSessionKey(request), code);
+//        validateCodeRepository.save(request, code, getValidateCodeType(request));
     }
 
     /**

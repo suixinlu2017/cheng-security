@@ -1,5 +1,6 @@
 package com.cheng.security.app;
 
+import com.cheng.security.app.social.openid.OpenIdAuthenticationSecurityConfig;
 import com.cheng.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.cheng.security.core.properties.SecurityConstants;
 import com.cheng.security.core.properties.SecurityProperties;
@@ -28,6 +29,9 @@ public class ChengResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+
+    @Autowired
+    private OpenIdAuthenticationSecurityConfig openIdAuthenticationSecurityConfig;
 
     @Autowired
     private ValidateCodeSecurityConfig validateCodeSecurityConfig;
@@ -66,6 +70,10 @@ public class ChengResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and()
                 // 社交登录配置
                 .apply(chengSpringSocialConfig)
+
+                .and()
+                // app 登录 openid 配置
+                .apply(openIdAuthenticationSecurityConfig)
 
                 .and()
                 .authorizeRequests()

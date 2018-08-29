@@ -15,10 +15,12 @@ public class ChengSpringSocialConfigurer extends SpringSocialConfigurer {
 
     private String filterProcessesUrl;
 
+    private SocialAuthenticationFilterPostProcessor socialAuthenticationFilterPostProcessor;
+
     @Autowired
     private SecurityProperties securityProperties;
 
-    public ChengSpringSocialConfigurer(String filterProcessesUrl) {
+    ChengSpringSocialConfigurer(String filterProcessesUrl) {
         this.filterProcessesUrl = filterProcessesUrl;
     }
 
@@ -27,6 +29,26 @@ public class ChengSpringSocialConfigurer extends SpringSocialConfigurer {
     protected <T> T postProcess(T object) {
         SocialAuthenticationFilter filter = (SocialAuthenticationFilter) super.postProcess(object);
         filter.setFilterProcessesUrl(filterProcessesUrl);
+
+        if (socialAuthenticationFilterPostProcessor != null) {
+            socialAuthenticationFilterPostProcessor.process(filter);
+        }
         return (T) filter;
+    }
+
+    public String getFilterProcessesUrl() {
+        return filterProcessesUrl;
+    }
+
+    public void setFilterProcessesUrl(String filterProcessesUrl) {
+        this.filterProcessesUrl = filterProcessesUrl;
+    }
+
+    public SocialAuthenticationFilterPostProcessor getSocialAuthenticationFilterPostProcessor() {
+        return socialAuthenticationFilterPostProcessor;
+    }
+
+    public void setSocialAuthenticationFilterPostProcessor(SocialAuthenticationFilterPostProcessor socialAuthenticationFilterPostProcessor) {
+        this.socialAuthenticationFilterPostProcessor = socialAuthenticationFilterPostProcessor;
     }
 }

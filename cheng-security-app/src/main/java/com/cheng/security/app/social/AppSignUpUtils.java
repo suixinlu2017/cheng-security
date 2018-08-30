@@ -55,7 +55,7 @@ public class AppSignUpUtils {
         ConnectionData connectionData = (ConnectionData) redisTemplate.opsForValue().get(key);
         // 通过 providerId 用 connectionFactoryLocator 拿到连接工厂，再根据 ConnectionData 创建 connection
         Connection<?> connection = connectionFactoryLocator
-                .getConnectionFactory(connectionData.getProviderUserId()).createConnection(connectionData);
+                .getConnectionFactory(connectionData.getProviderId()).createConnection(connectionData);
         // 根据 userId 拿到这个用户对应的 usersConnectionRepository，然后与 connection 绑定
         usersConnectionRepository.createConnectionRepository(userId).addConnection(connection);
 

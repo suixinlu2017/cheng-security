@@ -80,12 +80,13 @@ public class ChengResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers(
                         SecurityConstants.DEFAULT_AUTHENTICATION_URL,
                         SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_OPENID,
                         securityProperties.getBrowser().getLoginPage(),
                         SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
                         securityProperties.getBrowser().getSignUpUrl(),
                         securityProperties.getBrowser().getSignOutUrl(),
                         securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
-                        "/user/register")
+                        "/user/register", "/social/singUp")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

@@ -1,4 +1,4 @@
-package com.cheng.security.browser.support;
+package com.cheng.security.core.support;
 
 /**
  * @author cheng

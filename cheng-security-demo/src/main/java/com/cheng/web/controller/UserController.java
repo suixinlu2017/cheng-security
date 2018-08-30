@@ -2,6 +2,7 @@ package com.cheng.web.controller;
 
 import com.cheng.dto.User;
 import com.cheng.dto.UserQueryCondition;
+import com.cheng.security.app.social.AppSignUpUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,6 +34,9 @@ public class UserController {
     @Autowired
     private ProviderSignInUtils providerSignInUtils;
 
+    @Autowired
+    private AppSignUpUtils appSignUpUtils;
+
     /**
      * 注册用户
      *
@@ -44,7 +48,11 @@ public class UserController {
 
         // 不管是注册用户还是绑定用户都会拿到一个用户唯一标识
         String userId = user.getUsername();
-        providerSignInUtils.doPostSignUp(userId, new ServletWebRequest(request));
+
+        // 浏览器环境下用户注册
+//        providerSignInUtils.doPostSignUp(userId, new ServletWebRequest(request));
+        // app环境下用户注册
+        appSignUpUtils.doPostSignUp(new ServletWebRequest(request), userId);
     }
 
     /**
@@ -70,6 +78,7 @@ public class UserController {
      * @return
      */
     @PostMapping
+    @ApiOperation(value = "创建用户")
     public User create(@Valid @RequestBody User user) {
 
         System.out.println(user.getId());

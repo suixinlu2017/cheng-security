@@ -113,7 +113,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         securityProperties.getBrowser().getSignUpUrl(),
                         securityProperties.getBrowser().getSignOutUrl(),
                         securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
-                        SecurityConstants.DEFAULT_SESSION_INVALID_URL)
+                        "/user/register")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

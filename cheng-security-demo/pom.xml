@@ -18,7 +18,7 @@
             <artifactId>cheng.security.browser</artifactId>
             <version>${cheng.security.version}</version>
         </dependency>-->
-       <dependency>
+        <dependency>
             <groupId>com.cheng.security</groupId>
             <artifactId>cheng.security.app</artifactId>
             <version>${cheng.security.version}</version>
@@ -48,6 +48,13 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
+        </dependency>
+
+        <!-- jwt 解析 -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.7.0</version>
         </dependency>
 
         <dependency>

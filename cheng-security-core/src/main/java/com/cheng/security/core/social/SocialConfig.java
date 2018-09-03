@@ -4,7 +4,6 @@ import com.cheng.security.core.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
@@ -25,7 +24,6 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableSocial
-@Order(1)
 public class SocialConfig extends SocialConfigurerAdapter {
 
     private static final String TABLE_PREFIX = "cheng_";
@@ -38,6 +36,9 @@ public class SocialConfig extends SocialConfigurerAdapter {
 
     @Autowired(required = false)
     private ConnectionSignUp connectionSignUp;
+
+    @Autowired(required = false)
+    private SocialAuthenticationFilterPostProcessor socialAuthenticationFilterPostProcessor;
 
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
@@ -58,7 +59,10 @@ public class SocialConfig extends SocialConfigurerAdapter {
     public SpringSocialConfigurer chengSocialSecurityConfig() {
         String filterProcessesUrl = securityProperties.getSocial().getFilterProcessesUrl();
         ChengSpringSocialConfigurer configurer = new ChengSpringSocialConfigurer(filterProcessesUrl);
+        // 浏览器环境下注册跳转的地址
         configurer.signupUrl(securityProperties.getBrowser().getSignUpUrl());
+
+        configurer.setSocialAuthenticationFilterPostProcessor(socialAuthenticationFilterPostProcessor);
         return configurer;
     }
 

@@ -1,4 +1,4 @@
-package com.cheng.security.browser.support;
+package com.cheng.security.core.support;
 
 /**
  * 简单响应的封装类

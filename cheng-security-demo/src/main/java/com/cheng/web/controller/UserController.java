@@ -2,16 +2,20 @@ package com.cheng.web.controller;
 
 import com.cheng.dto.User;
 import com.cheng.dto.UserQueryCondition;
+import com.cheng.security.app.social.AppSignUpUtils;
+import com.cheng.security.core.properties.SecurityProperties;
 import com.fasterxml.jackson.annotation.JsonView;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +23,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +38,12 @@ public class UserController {
     @Autowired
     private ProviderSignInUtils providerSignInUtils;
 
+    @Autowired
+    private AppSignUpUtils appSignUpUtils;
+
+    @Autowired
+    private SecurityProperties securityProperties;
+
     /**
      * 注册用户
      *
@@ -44,7 +55,11 @@ public class UserController {
 
         // 不管是注册用户还是绑定用户都会拿到一个用户唯一标识
         String userId = user.getUsername();
-        providerSignInUtils.doPostSignUp(userId, new ServletWebRequest(request));
+
+        // 浏览器环境下用户注册
+//        providerSignInUtils.doPostSignUp(userId, new ServletWebRequest(request));
+        // app环境下用户注册
+        appSignUpUtils.doPostSignUp(new ServletWebRequest(request), userId);
     }
 
     /**
@@ -53,15 +68,19 @@ public class UserController {
      * @return
      */
     @GetMapping("/me")
-    public Object getCurrentUser(@AuthenticationPrincipal UserDetails userDetails
-            /*Authentication authentication*/) {
+    public Object getCurrentUser(/*@AuthenticationPrincipal UserDetails userDetails*/
+            Authentication user, HttpServletRequest request) {
 
-        // 返回所有信息
-//         return SecurityContextHolder.getContext().getAuthentication();
-//         return authentication;
+        String header = request.getHeader("Authorization");
+        String token = StringUtils.substringAfter(header, "bearer ");
+        Claims claims = Jwts.parser()
+                .setSigningKey(securityProperties.getOauth2().getJwtSigningKey().getBytes(StandardCharsets.UTF_8))
+                .parseClaimsJws(token).getBody();
 
-        // 只返回 userDetails 相关信息
-        return userDetails;
+        String company = (String) claims.get("company");
+        System.out.println(company);
+
+        return user;
     }
 
     /**
@@ -70,6 +89,7 @@ public class UserController {
      * @return
      */
     @PostMapping
+    @ApiOperation(value = "创建用户")
     public User create(@Valid @RequestBody User user) {
 
         System.out.println(user.getId());

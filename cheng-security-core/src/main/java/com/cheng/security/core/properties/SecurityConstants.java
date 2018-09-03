@@ -29,6 +29,11 @@ public interface SecurityConstants {
     String DEFAULT_LOGIN_PROCESSING_URL_MOBILE = "/authentication/mobile";
 
     /**
+     * 默认 OPENID登录 请求处理 url
+     */
+    String DEFAULT_LOGIN_PROCESSING_URL_OPENID = "/authentication/openid";
+
+    /**
      * 默认登录页面
      */
     String DEFAULT_LOGIN_PAGE_URL = "/cheng-signIn.html";
@@ -49,7 +54,17 @@ public interface SecurityConstants {
     String DEFAULT_PARAMETER_NAME_MOBILE = "mobile";
 
     /**
+     * openid 参数名
+     */
+    String DEFAULT_PARAMETER_NAME_OPENID = "openId";
+
+    /**
+     * providerId 参数名
+     */
+    String DEFAULT_PARAMETER_NAME_PROVIDERID = "providerId";
+
+    /**
      * session 失效默认跳转地址
      */
-    String DEFAULT_SESSION_INVALID_URL = "/session/invalid";
+    String DEFAULT_SESSION_INVALID_URL = "/cheng-session-invalid.html";
 }

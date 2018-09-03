@@ -1,9 +1,9 @@
 package com.cheng.security.browser;
 
-import com.cheng.security.browser.support.SimpleResponse;
-import com.cheng.security.browser.support.SocialUserInfo;
 import com.cheng.security.core.properties.SecurityConstants;
 import com.cheng.security.core.properties.SecurityProperties;
+import com.cheng.security.core.support.SimpleResponse;
+import com.cheng.security.core.support.SocialUserInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,12 +91,5 @@ public class BrowserSecurityController {
         userInfo.setHeadPortrait(connection.getImageUrl());
 
         return userInfo;
-    }
-
-    @GetMapping(SecurityConstants.DEFAULT_SESSION_INVALID_URL)
-    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
-    public SimpleResponse sessionInvalid() {
-        String message = "session失效";
-        return new SimpleResponse(message);
     }
 }

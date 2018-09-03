@@ -1,4 +1,4 @@
-package com.cheng.security.browser.authentication;
+package com.cheng.security.app.authentication;
 
 import com.cheng.security.core.properties.LoginResponseType;
 import com.cheng.security.core.properties.SecurityProperties;

@@ -1,0 +1,8 @@
+server:
+  port: 9999
+  context-path: /server
+
+security:
+  user:
+    # 用户认证授权密码
+    password: 123456·

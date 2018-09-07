@@ -8,6 +8,7 @@ import com.cheng.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -115,6 +116,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                         securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
                         "/user/register")
                 .permitAll()
+                // 只有拥有 admin 角色的用户才能访问
+                .antMatchers(HttpMethod.GET,"/user/*").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
 

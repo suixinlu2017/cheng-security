@@ -18,9 +18,9 @@ import org.springframework.stereotype.Component;
  *         2018/8/6 14:50
  */
 @Component
-public class MyUserDetailsServiceImpl implements UserDetailsService, SocialUserDetailsService {
+public class DemoUserDetailsServiceImpl implements UserDetailsService, SocialUserDetailsService {
 
-    private Logger logger = LoggerFactory.getLogger(MyUserDetailsServiceImpl.class);
+    private Logger logger = LoggerFactory.getLogger(DemoUserDetailsServiceImpl.class);
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -62,6 +62,7 @@ public class MyUserDetailsServiceImpl implements UserDetailsService, SocialUserD
 
         return new SocialUser(userId, password,
                 true, true, true, true,
-                AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_USER"));
+                // 添加 角色信息，用逗号分隔，配置用户授权
+                AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_ADMIN"));
     }
 }

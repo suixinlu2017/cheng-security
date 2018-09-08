@@ -22,6 +22,7 @@ import javax.sql.DataSource;
  * @author cheng
  *         2018/8/8 20:07
  */
+//@Order(Integer.MIN_VALUE)
 @Configuration
 @EnableSocial
 public class SocialConfig extends SocialConfigurerAdapter {

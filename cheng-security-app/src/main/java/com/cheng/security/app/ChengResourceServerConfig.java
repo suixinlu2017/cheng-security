@@ -2,6 +2,7 @@ package com.cheng.security.app;
 
 import com.cheng.security.app.social.openid.OpenIdAuthenticationSecurityConfig;
 import com.cheng.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.cheng.security.core.authorize.AuthorizeConfigManager;
 import com.cheng.security.core.properties.SecurityConstants;
 import com.cheng.security.core.properties.SecurityProperties;
 import com.cheng.security.core.validate.code.ValidateCodeSecurityConfig;
@@ -45,6 +46,9 @@ public class ChengResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private AuthenticationFailureHandler chengAuthenticationFailureHandler;
 
+    @Autowired
+    private AuthorizeConfigManager authorizeConfigManager;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
@@ -76,22 +80,9 @@ public class ChengResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .apply(openIdAuthenticationSecurityConfig)
 
                 .and()
-                .authorizeRequests()
-                .antMatchers(
-                        SecurityConstants.DEFAULT_AUTHENTICATION_URL,
-                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
-                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_OPENID,
-                        securityProperties.getBrowser().getLoginPage(),
-                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
-                        securityProperties.getBrowser().getSignUpUrl(),
-                        securityProperties.getBrowser().getSignOutUrl(),
-                        securityProperties.getBrowser().getSession().getSessionInvalidUrl(),
-                        "/user/register", "/social/singUp")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-
-                .and()
                 .csrf().disable();
+
+        // 针对url的安全配置
+        authorizeConfigManager.config(http.authorizeRequests());
     }
 }

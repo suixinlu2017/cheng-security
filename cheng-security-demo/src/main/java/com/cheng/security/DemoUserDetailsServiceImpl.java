@@ -12,12 +12,14 @@ import org.springframework.social.security.SocialUser;
 import org.springframework.social.security.SocialUserDetails;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author cheng
  *         2018/8/6 14:50
  */
 @Component
+@Transactional(rollbackFor = RuntimeException.class)
 public class DemoUserDetailsServiceImpl implements UserDetailsService, SocialUserDetailsService {
 
     private Logger logger = LoggerFactory.getLogger(DemoUserDetailsServiceImpl.class);

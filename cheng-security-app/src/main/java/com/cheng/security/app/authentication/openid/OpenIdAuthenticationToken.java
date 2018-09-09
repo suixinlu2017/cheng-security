@@ -1,4 +1,4 @@
-package com.cheng.security.app.social.openid;
+package com.cheng.security.app.authentication.openid;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

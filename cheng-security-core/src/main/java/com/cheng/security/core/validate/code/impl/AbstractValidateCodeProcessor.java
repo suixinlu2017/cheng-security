@@ -62,7 +62,6 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
     private void save(ServletWebRequest request, C validateCode) {
         // 解决验证码存入 session 不能序列化问题
         ValidateCode code = new ValidateCode(validateCode.getCode(), validateCode.getExpireTime());
-//        sessionStrategy.setAttribute(request, getSessionKey(request), code);
         validateCodeRepository.save(request, code, getValidateCodeType(request));
     }
 
@@ -85,8 +84,7 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 
         String codeInRequest;
         try {
-            codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(),
-                    codeType.getParamNameOnValidate());
+            codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), codeType.getParamNameOnValidate());
         } catch (ServletRequestBindingException e) {
             throw new ValidateCodeException("获取验证码的值失败");
         }
@@ -111,15 +109,6 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
         validateCodeRepository.remove(request, codeType);
     }
 
-    /**
-     * 构建验证码放入 session 时的 key
-     *
-     * @param request
-     * @return
-     */
-    private String getSessionKey(ServletWebRequest request) {
-        return SESSION_KEY_PREFIX + getValidateCodeType(request).toString().toUpperCase();
-    }
 
     /**
      * 根据请求的 url 获取校验码类型

@@ -33,7 +33,11 @@ public class SmsCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapt
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
+    /**
+     * required = false
+     * 在 app模块下不用注入，不需要 记住我功能，只有在浏览器模块下才注入
+     */
+    @Autowired(required = false)
     private PersistentTokenRepository persistentTokenRepository;
 
     @Override
@@ -44,7 +48,7 @@ public class SmsCodeAuthenticationSecurityConfig extends SecurityConfigurerAdapt
         smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
         smsCodeAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
 
-        // app模块下 记住我 功能
+        // 浏览器模块手机记住我功能
         String key = UUID.randomUUID().toString();
         smsCodeAuthenticationFilter.setRememberMeServices(
                 new PersistentTokenBasedRememberMeServices(key, userDetailsService, persistentTokenRepository));

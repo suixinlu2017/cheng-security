@@ -1,5 +1,6 @@
 package com.cheng.security.browser.session;
 
+import com.cheng.security.core.properties.SecurityProperties;
 import com.cheng.security.core.support.SimpleResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
@@ -23,12 +24,19 @@ import java.io.IOException;
  */
 public class AbstractSessionStrategy {
 
+    private static final String SUFFIX = ".html";
+
     private final Logger logger = LoggerFactory.getLogger(AbstractSessionStrategy.class);
 
     /**
      * 跳转的 url
      */
     private String destinationUrl;
+
+    /**
+     * 系统配置信息
+     */
+    private SecurityProperties securityProperties;
 
     /**
      * 重定向策略
@@ -42,9 +50,15 @@ public class AbstractSessionStrategy {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public AbstractSessionStrategy(String invalidSessionUrl) {
+    public AbstractSessionStrategy(SecurityProperties securityProperties) {
+
+        String invalidSessionUrl = securityProperties.getBrowser().getSession().getSessionInvalidUrl();
+
         Assert.isTrue(UrlUtils.isValidRedirectUrl(invalidSessionUrl), "url must start with '/' or with 'http(s)' ");
+        Assert.isTrue(StringUtils.endsWithIgnoreCase(invalidSessionUrl, SUFFIX), "url must end with '.html'");
+
         this.destinationUrl = invalidSessionUrl;
+        this.securityProperties = securityProperties;
     }
 
     protected void onSessionInvalid(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -58,9 +72,15 @@ public class AbstractSessionStrategy {
         String sourceUrl = request.getRequestURI();
         String targetUrl;
 
-        if (StringUtils.endsWithIgnoreCase(sourceUrl, ".html")) {
-            targetUrl = destinationUrl + ".html";
-            logger.info("session失效，跳转到 " + targetUrl);
+        if (StringUtils.endsWithIgnoreCase(sourceUrl, SUFFIX)) {
+            if (StringUtils.equals(sourceUrl, securityProperties.getBrowser().getSignInPage())
+                    || StringUtils.equals(sourceUrl, securityProperties.getBrowser().getSignOutUrl())) {
+                targetUrl = sourceUrl;
+            } else {
+                targetUrl = destinationUrl;
+            }
+
+            logger.info("跳转到: " + targetUrl);
             redirectStrategy.sendRedirect(request, response, targetUrl);
         } else {
             Object result = buildResponseContent(request);
@@ -71,6 +91,7 @@ public class AbstractSessionStrategy {
     }
 
     protected  Object buildResponseContent(HttpServletRequest request) {
+
         String message = "session已失效";
         if (isConcurrency()) {
             message += "，有可能是并发登录导致的";
@@ -80,7 +101,7 @@ public class AbstractSessionStrategy {
     }
 
     /**
-     * session失效是否是并发导致的
+     * session 失效是否是并发导致的
      *
      * @return
      */

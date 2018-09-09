@@ -36,7 +36,12 @@ public interface SecurityConstants {
     /**
      * 默认登录页面
      */
-    String DEFAULT_LOGIN_PAGE_URL = "/cheng-signIn.html";
+    String DEFAULT_SIGN_IN_PAGE_URL = "/cheng-signIn.html";
+
+    /**
+     * 默认注册页面
+     */
+    String DEFAULT_SIGN_UP_URL = "/cheng-signUp.html";
 
     /**
      * 验证图片验证码时，http请求中默认携带的图片验证码信息的参数的名称
@@ -61,10 +66,15 @@ public interface SecurityConstants {
     /**
      * providerId 参数名
      */
-    String DEFAULT_PARAMETER_NAME_PROVIDERID = "providerId";
+    String DEFAULT_PARAMETER_NAME_PROVIDER_ID = "providerId";
 
     /**
      * session 失效默认跳转地址
      */
     String DEFAULT_SESSION_INVALID_URL = "/cheng-session-invalid.html";
+
+    /**
+     * 获取第三方用户信息的 url
+     */
+    String DEFAULT_SOCIAL_USER_INFO_URL = "/social/user";
 }

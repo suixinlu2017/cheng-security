@@ -1,4 +1,4 @@
-package com.cheng.security.app.social.openid;
+package com.cheng.security.app.authentication.openid;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,7 +21,6 @@ public class OpenIdAuthenticationProvider implements AuthenticationProvider {
     private SocialUserDetailsService userDetailsService;
 
     private UsersConnectionRepository usersConnectionRepository;
-
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

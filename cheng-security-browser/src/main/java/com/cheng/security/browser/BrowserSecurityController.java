@@ -2,8 +2,9 @@ package com.cheng.security.browser;
 
 import com.cheng.security.core.properties.SecurityConstants;
 import com.cheng.security.core.properties.SecurityProperties;
+import com.cheng.security.core.social.AbstractSocialController;
+import com.cheng.security.core.social.support.SocialUserInfo;
 import com.cheng.security.core.support.SimpleResponse;
-import com.cheng.security.core.support.SocialUserInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ import java.io.IOException;
  *         2018/8/6 15:44
  */
 @RestController
-public class BrowserSecurityController {
+public class BrowserSecurityController extends AbstractSocialController {
 
     private static final String SUFFIX_HTML = "html";
 
@@ -66,11 +67,11 @@ public class BrowserSecurityController {
             String targetUrl = savedRequest.getRedirectUrl();
             logger.info("引发跳转的请求是: " + targetUrl);
             if (StringUtils.endsWithIgnoreCase(targetUrl, SUFFIX_HTML)) {
-                redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
+                redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getSignInPage());
             }
         }
 
-        return new SimpleResponse("访问的服务需要身份认证，请引导用户到登录页。");
+        return new SimpleResponse("访问的服务需要身份认证，请引导用户到登录页");
     }
 
     /**
@@ -79,17 +80,10 @@ public class BrowserSecurityController {
      * @param request
      * @return
      */
-    @GetMapping("/social/user")
+    @GetMapping(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL)
     public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
 
-        SocialUserInfo userInfo = new SocialUserInfo();
         Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
-
-        userInfo.setProviderId(connection.getKey().getProviderId());
-        userInfo.setProviderUserId(connection.getKey().getProviderUserId());
-        userInfo.setNickname(connection.getDisplayName());
-        userInfo.setHeadPortrait(connection.getImageUrl());
-
-        return userInfo;
+        return buildSocialUserInfo(connection);
     }
 }

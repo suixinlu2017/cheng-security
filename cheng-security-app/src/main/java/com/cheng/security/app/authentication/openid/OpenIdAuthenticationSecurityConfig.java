@@ -1,4 +1,4 @@
-package com.cheng.security.app.social.openid;
+package com.cheng.security.app.authentication.openid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,5 +1,6 @@
 package com.cheng.security.browser.session;
 
+import com.cheng.security.core.properties.SecurityProperties;
 import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
@@ -13,8 +14,8 @@ import java.io.IOException;
  */
 public class ChengExpiredSessionStrategy extends AbstractSessionStrategy implements SessionInformationExpiredStrategy {
 
-    public ChengExpiredSessionStrategy(String invalidSessionUrl) {
-        super(invalidSessionUrl);
+    public ChengExpiredSessionStrategy(SecurityProperties securityProperties) {
+        super(securityProperties);
     }
 
     @Override

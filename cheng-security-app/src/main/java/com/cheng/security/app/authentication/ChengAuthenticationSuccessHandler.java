@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 浏览器环境下登录成功的处理器
+ * app环境下登录认证的处理器
  *
  * @author cheng
  *         2018/8/6 21:11
@@ -101,8 +101,7 @@ public class ChengAuthenticationSuccessHandler extends SimpleUrlAuthenticationSu
         try {
             decoded = Base64.decode(base64Token);
         } catch (IllegalArgumentException e) {
-            throw new BadCredentialsException(
-                    "Failed to decode basic authentication token");
+            throw new BadCredentialsException("Failed to decode basic authentication token");
         }
 
         String token = new String(decoded, StandardCharsets.UTF_8);

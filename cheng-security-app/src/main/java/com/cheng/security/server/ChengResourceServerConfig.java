@@ -1,10 +1,9 @@
-package com.cheng.security.app;
+package com.cheng.security.server;
 
-import com.cheng.security.app.social.openid.OpenIdAuthenticationSecurityConfig;
+import com.cheng.security.app.authentication.openid.OpenIdAuthenticationSecurityConfig;
+import com.cheng.security.core.authentication.FormAuthenticationConfig;
 import com.cheng.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.cheng.security.core.authorize.AuthorizeConfigManager;
-import com.cheng.security.core.properties.SecurityConstants;
-import com.cheng.security.core.properties.SecurityProperties;
 import com.cheng.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +13,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.social.security.SpringSocialConfigurer;
+
+import javax.sql.DataSource;
 
 /**
  * 资源服务器配置
@@ -26,7 +27,7 @@ import org.springframework.social.security.SpringSocialConfigurer;
 public class ChengResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
-    private SecurityProperties securityProperties;
+    private DataSource dataSource;
 
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
@@ -49,19 +50,13 @@ public class ChengResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private AuthorizeConfigManager authorizeConfigManager;
 
+    @Autowired
+    private FormAuthenticationConfig formAuthenticationConfig;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-        http
-                .formLogin()
-                // 登录页
-                .loginPage(SecurityConstants.DEFAULT_AUTHENTICATION_URL)
-                // 登录处理页
-                .loginProcessingUrl(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM)
-                // 成功 handler
-                .successHandler(chengAuthenticationSuccessHandler)
-                // 失败 handler
-                .failureHandler(chengAuthenticationFailureHandler);
+        formAuthenticationConfig.configure(http);
 
         http
                 // 校验码相关配置

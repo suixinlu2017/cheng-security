@@ -1,4 +1,4 @@
-package com.cheng.security.core.support;
+package com.cheng.security.core.social.support;
 
 /**
  * @author cheng

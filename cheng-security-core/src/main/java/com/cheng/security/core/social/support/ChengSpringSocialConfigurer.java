@@ -1,4 +1,4 @@
-package com.cheng.security.core.social;
+package com.cheng.security.core.social.support;
 
 import com.cheng.security.core.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class ChengSpringSocialConfigurer extends SpringSocialConfigurer {
     @Autowired
     private SecurityProperties securityProperties;
 
-    ChengSpringSocialConfigurer(String filterProcessesUrl) {
+    public ChengSpringSocialConfigurer(String filterProcessesUrl) {
         this.filterProcessesUrl = filterProcessesUrl;
     }
 

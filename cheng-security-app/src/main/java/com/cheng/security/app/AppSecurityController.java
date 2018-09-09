@@ -1,7 +1,9 @@
 package com.cheng.security.app;
 
 import com.cheng.security.app.social.AppSignUpUtils;
-import com.cheng.security.core.support.SocialUserInfo;
+import com.cheng.security.core.properties.SecurityConstants;
+import com.cheng.security.core.social.AbstractSocialController;
+import com.cheng.security.core.social.support.SocialUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.social.connect.Connection;
@@ -14,11 +16,13 @@ import org.springframework.web.context.request.ServletWebRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * app模块登录
+ *
  * @author cheng
  *         2018/08/30 15:39
  */
 @RestController
-public class AppSecurityController {
+public class AppSecurityController extends AbstractSocialController {
 
     @Autowired
     ProviderSignInUtils providerSignInUtils;
@@ -33,20 +37,14 @@ public class AppSecurityController {
      * @param request
      * @return
      */
-    @GetMapping("/social/singUp")
+    @GetMapping(SecurityConstants.DEFAULT_SOCIAL_USER_INFO_URL)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public SocialUserInfo getSocialUserInfo(HttpServletRequest request) {
 
-        SocialUserInfo userInfo = new SocialUserInfo();
         Connection<?> connection = providerSignInUtils.getConnectionFromSession(new ServletWebRequest(request));
-
-        userInfo.setProviderId(connection.getKey().getProviderId());
-        userInfo.setProviderUserId(connection.getKey().getProviderUserId());
-        userInfo.setNickname(connection.getDisplayName());
-        userInfo.setHeadPortrait(connection.getImageUrl());
 
         appSignUpUtils.saveConnectionData(new ServletWebRequest(request), connection.createData());
 
-        return userInfo;
+        return buildSocialUserInfo(connection);
     }
 }

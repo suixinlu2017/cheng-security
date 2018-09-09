@@ -32,6 +32,7 @@ public class SessionValidateCodeRepository implements ValidateCodeRepository {
         sessionStrategy.setAttribute(request, getSessionKey(request, validateCodeType), code);
     }
 
+
     @Override
     public ValidateCode get(ServletWebRequest request, ValidateCodeType validateCodeType) {
         return (ValidateCode) sessionStrategy.getAttribute(request, getSessionKey(request, validateCodeType));

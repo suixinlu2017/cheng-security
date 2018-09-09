@@ -1,4 +1,4 @@
-package com.cheng.security.app.jwt;
+package com.cheng.security.server;
 
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -12,7 +12,7 @@ import java.util.Map;
  * @author cheng
  *         2018/08/31 11:14
  */
-public class ChengJwtTokenEnhancer implements TokenEnhancer {
+public class TokenJwtEnhancer implements TokenEnhancer {
 
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {

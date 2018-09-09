@@ -1,6 +1,6 @@
 package com.cheng.security.browser;
 
-import com.cheng.security.core.authentication.AbstractChannelSecurityConfig;
+import com.cheng.security.core.authentication.FormAuthenticationConfig;
 import com.cheng.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.cheng.security.core.authorize.AuthorizeConfigManager;
 import com.cheng.security.core.properties.SecurityProperties;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -20,13 +21,13 @@ import org.springframework.social.security.SpringSocialConfigurer;
 import javax.sql.DataSource;
 
 /**
- * Spring Security 授权组件
+ * 浏览器环境下安全配置主类
  *
  * @author cheng
  *         2018/8/6 13:33
  */
 @Configuration
-public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
+public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SecurityProperties securityProperties;
@@ -58,10 +59,13 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private AuthorizeConfigManager authorizeConfigManager;
 
+    @Autowired
+    private FormAuthenticationConfig formAuthenticationConfig;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        applyPasswordAuthenticationConfig(http);
+        formAuthenticationConfig.configure(http);
 
         http
                 // 校验码相关配置
@@ -99,8 +103,6 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
                 .logout()
                 // 退出登录请求
                 .logoutUrl("/signOut")
-                // 退出成功页
-//                .logoutSuccessUrl("/cheng-logout.html")
                 // 退出成功请求
                 .logoutSuccessHandler(logoutSuccessHandler)
                 // 退出成功时删除 cookie 信息

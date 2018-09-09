@@ -1,4 +1,4 @@
-package com.cheng.security.core.social;
+package com.cheng.security.core.social.support;
 
 import org.springframework.social.security.SocialAuthenticationFilter;
 

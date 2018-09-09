@@ -1,6 +1,8 @@
 package com.cheng.security.core.social;
 
 import com.cheng.security.core.properties.SecurityProperties;
+import com.cheng.security.core.social.support.ChengSpringSocialConfigurer;
+import com.cheng.security.core.social.support.SocialAuthenticationFilterPostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +19,7 @@ import org.springframework.social.security.SpringSocialConfigurer;
 import javax.sql.DataSource;
 
 /**
- * 社交配置适配器
+ * 社交登录配置主类
  *
  * @author cheng
  *         2018/8/8 20:07
@@ -56,8 +58,14 @@ public class SocialConfig extends SocialConfigurerAdapter {
         return repository;
     }
 
+    /**
+     * 社交登录配置类，供浏览器或 app模块引入，设置登录配置用
+     *
+     * @return
+     */
     @Bean
     public SpringSocialConfigurer chengSocialSecurityConfig() {
+
         String filterProcessesUrl = securityProperties.getSocial().getFilterProcessesUrl();
         ChengSpringSocialConfigurer configurer = new ChengSpringSocialConfigurer(filterProcessesUrl);
         // 浏览器环境下注册跳转的地址
@@ -68,6 +76,8 @@ public class SocialConfig extends SocialConfigurerAdapter {
     }
 
     /**
+     * 处理注册流程的工具类
+     * <p>
      * 解决两个问题：
      * 1.在注册过程中拿到 Spring Social 的信息
      * 2.注册完成了如何把业务系统的用户id传给 Spring Social
@@ -77,8 +87,7 @@ public class SocialConfig extends SocialConfigurerAdapter {
      */
     @Bean
     public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator) {
-        return new ProviderSignInUtils(connectionFactoryLocator,
-                getUsersConnectionRepository(connectionFactoryLocator)) {
+        return new ProviderSignInUtils(connectionFactoryLocator, getUsersConnectionRepository(connectionFactoryLocator)) {
         };
     }
 }

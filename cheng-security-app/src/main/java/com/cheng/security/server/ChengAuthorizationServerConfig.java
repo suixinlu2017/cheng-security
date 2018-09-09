@@ -1,4 +1,4 @@
-package com.cheng.security.app;
+package com.cheng.security.server;
 
 import com.cheng.security.core.properties.OAuth2ClientProperties;
 import com.cheng.security.core.properties.SecurityProperties;
@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -48,6 +49,9 @@ public class ChengAuthorizationServerConfig extends AuthorizationServerConfigure
     @Autowired
     private SecurityProperties securityProperties;
 
+    /**
+     * 认证及 token 配置
+     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
 
@@ -70,6 +74,22 @@ public class ChengAuthorizationServerConfig extends AuthorizationServerConfigure
         }
     }
 
+    /**
+     * tokenKey 的访问权限表达式配置
+     *
+     * @param security
+     */
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) {
+        security.tokenKeyAccess("permitAll()");
+    }
+
+    /**
+     * 客户端配置
+     *
+     * @param clients
+     * @throws Exception
+     */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 

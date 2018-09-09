@@ -24,6 +24,12 @@
             <version>${cheng.security.version}</version>
         </dependency>-->
 
+        <!--<dependency>
+            <groupId>com.cheng.security</groupId>
+            <artifactId>cheng-security-authorize</artifactId>
+            <version>${cheng.security.version}</version>
+        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>

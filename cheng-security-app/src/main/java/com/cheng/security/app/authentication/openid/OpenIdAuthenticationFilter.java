@@ -1,4 +1,4 @@
-package com.cheng.security.app.social.openid;
+package com.cheng.security.app.authentication.openid;
 
 import com.cheng.security.core.properties.SecurityConstants;
 import org.springframework.http.HttpMethod;
@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ public class OpenIdAuthenticationFilter extends AbstractAuthenticationProcessing
 
     private String openIdParameter = SecurityConstants.DEFAULT_PARAMETER_NAME_OPENID;
 
-    private String providerIdParameter = SecurityConstants.DEFAULT_PARAMETER_NAME_PROVIDERID;
+    private String providerIdParameter = SecurityConstants.DEFAULT_PARAMETER_NAME_PROVIDER_ID;
 
     private boolean postOnly = true;
 
@@ -89,7 +90,24 @@ public class OpenIdAuthenticationFilter extends AbstractAuthenticationProcessing
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 
-    public void setOpenIdParameter() {
+    public void setOpenIdParameter(String openIdParameter) {
+        Assert.hasText(openIdParameter,"Username parameter must not be empty or null");
+        this.openIdParameter = openIdParameter;
+    }
 
+    public void setPostOnly(boolean postOnly) {
+        this.postOnly = postOnly;
+    }
+
+    public final String getOpenIdParameter() {
+        return openIdParameter;
+    }
+
+    public String getProviderIdParameter() {
+        return providerIdParameter;
+    }
+
+    public void setProviderIdParameter(String providerIdParameter) {
+        this.providerIdParameter = providerIdParameter;
     }
 }

@@ -1,9 +1,8 @@
-package com.cheng.security.app;
+package com.cheng.security.server;
 
-import com.cheng.security.app.jwt.ChengJwtTokenEnhancer;
 import com.cheng.security.core.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,7 +44,7 @@ public class TokenStoreConfig {
      */
     @Configuration
     @ConditionalOnProperty(prefix = "cheng.security.oauth2", name = "tokenStore", havingValue = "jwt", matchIfMissing = true)
-    public static class JWtTokenConfig {
+    public static class JwtTokenConfig {
 
         @Autowired
         private SecurityProperties securityProperties;
@@ -57,15 +56,15 @@ public class TokenStoreConfig {
 
         @Bean
         public JwtAccessTokenConverter jwtAccessTokenConverter() {
-            JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
-            accessTokenConverter.setSigningKey(securityProperties.getOauth2().getJwtSigningKey());
-            return accessTokenConverter;
+            JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+            converter.setSigningKey(securityProperties.getOauth2().getJwtSigningKey());
+            return converter;
         }
 
         @Bean
-        @ConditionalOnMissingBean(name = "jwtTokenEnhancer")
+        @ConditionalOnBean(TokenEnhancer.class)
         public TokenEnhancer jwtTokenEnhancer() {
-            return new ChengJwtTokenEnhancer();
+            return new TokenJwtEnhancer();
         }
     }
 }

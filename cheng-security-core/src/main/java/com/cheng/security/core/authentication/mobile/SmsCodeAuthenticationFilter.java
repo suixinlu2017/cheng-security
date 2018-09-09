@@ -22,9 +22,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final String CHENG_FORM_MOBILE_KEY = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
+    private String mobileParameter = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
 
-    private String mobileParameter = CHENG_FORM_MOBILE_KEY;
     private boolean postOnly = true;
 
 
@@ -67,9 +66,13 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
         return request.getParameter(mobileParameter);
     }
 
-    private void setDetails(HttpServletRequest request,
-                            SmsCodeAuthenticationToken authRequest) {
+    private void setDetails(HttpServletRequest request,SmsCodeAuthenticationToken authRequest) {
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
+    }
+
+    public void setMobileParameter(String mobileParameter) {
+        Assert.hasText(mobileParameter, "Mobile parameter must not be empty or null");
+        this.mobileParameter = mobileParameter;
     }
 
     public void setPostOnly(boolean postOnly) {
@@ -78,10 +81,5 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
 
     public final String getMobileParameter() {
         return mobileParameter;
-    }
-
-    public void setMobileParameter(String mobileParameter) {
-        Assert.hasText(mobileParameter, "Mobile parameter must not be empty or null");
-        this.mobileParameter = mobileParameter;
     }
 }

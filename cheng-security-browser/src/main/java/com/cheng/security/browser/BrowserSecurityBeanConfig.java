@@ -33,7 +33,7 @@ public class BrowserSecurityBeanConfig {
     @Bean
     @ConditionalOnMissingBean(InvalidSessionStrategy.class)
     public InvalidSessionStrategy invalidSessionStrategy() {
-        return new ChengInvalidSessionStrategy(securityProperties.getBrowser().getSession().getSessionInvalidUrl());
+        return new ChengInvalidSessionStrategy(securityProperties);
     }
 
     /**
@@ -44,9 +44,14 @@ public class BrowserSecurityBeanConfig {
     @Bean
     @ConditionalOnMissingBean(SessionInformationExpiredStrategy.class)
     public SessionInformationExpiredStrategy sessionInformationExpiredStrategy() {
-        return new ChengExpiredSessionStrategy(securityProperties.getBrowser().getSession().getSessionInvalidUrl());
+        return new ChengExpiredSessionStrategy(securityProperties);
     }
 
+    /**
+     * 退出时的处理策略配置
+     *
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean(LogoutSuccessHandler.class)
     public LogoutSuccessHandler logoutSuccessHandler() {

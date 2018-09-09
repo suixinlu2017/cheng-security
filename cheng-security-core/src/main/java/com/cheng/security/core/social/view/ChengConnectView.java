@@ -1,4 +1,4 @@
-package com.cheng.security.core.social.social;
+package com.cheng.security.core.social.view;
 
 import org.springframework.web.servlet.view.AbstractView;
 

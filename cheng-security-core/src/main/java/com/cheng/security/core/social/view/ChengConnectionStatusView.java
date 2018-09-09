@@ -1,4 +1,4 @@
-package com.cheng.security.core.social.social;
+package com.cheng.security.core.social.view;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.CollectionUtils;
